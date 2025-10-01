@@ -1,0 +1,100 @@
+<aside
+  class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-gray-800 to-gray-900 text-white flex flex-col p-6 shadow-xl z-10">
+
+  <!-- Profile Section -->
+  <div class="flex items-center space-x-4 mb-10 pt-4">
+    <div
+      class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+      <i class="fas fa-user text-xl"></i>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-lg font">Username</span>
+      <div class="flex items-center text-xs text-blue-300 mt-1">
+        <span>ยอดเงินคงเหลือ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Section -->
+  <nav class="flex-1">
+    <ul class="space-y-3">
+      <!-- หน้าแรก -->
+      <li routerLink="/home"
+          routerLinkActive="bg-blue-50 bg-opacity-10 border-l-4 border-blue-500 text-blue-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg transition-all duration-300 hover:bg-blue-500 hover:bg-opacity-10 hover:translate-x-1">
+        <div class="w-6 text-center">
+          <i class="fas fa-home"></i>
+        </div>
+        <span class="font-medium">หน้าแรก</span>
+      </li>
+
+      <!-- เติมเงิน -->
+      <li (click)="openDepositModal()"
+          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg transition-all duration-300 hover:bg-blue-500 hover:bg-opacity-10 hover:translate-x-1">
+        <div class="w-6 text-center">
+          <i class="fas fa-wallet text-green-400"></i>
+        </div>
+        <span class="font-medium">เติมเงิน</span>
+      </li>
+
+      <!-- ประวัติการทำรายการ -->
+      <li routerLink="/tst-history"
+          routerLinkActive="bg-blue-50 bg-opacity-10 border-l-4 border-blue-500 text-blue-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg transition-all duration-300 hover:bg-blue-500 hover:bg-opacity-10 hover:translate-x-1">
+        <div class="w-6 text-center">
+          <i class="fas fa-history text-yellow-400"></i>
+        </div>
+        <span class="font-medium">ประวัติการทำรายการ</span>
+      </li>
+
+      <!-- เกมของฉัน -->
+      <li routerLink="/mygame"
+          routerLinkActive="bg-blue-50 bg-opacity-10 border-l-4 border-blue-500 text-blue-400"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg transition-all duration-300 hover:bg-blue-500 hover:bg-opacity-10 hover:translate-x-1">
+        <div class="w-6 text-center">
+          <i class="fas fa-gamepad text-purple-400"></i>
+        </div>
+        <span class="font-medium">เกมของฉัน</span>
+      </li>
+
+      <!-- ออกจากระบบ -->
+      <li
+          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg mt-8 transition-all duration-300 hover:bg-red-500 hover:bg-opacity-10 hover:translate-x-1">
+        <div class="w-6 text-center">
+          <i class="fas fa-sign-out-alt text-red-400"></i>
+        </div>
+        <span class="font-medium">ออกจากระบบ</span>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- Modal เติมเงิน -->
+<div *ngIf="showDepositModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg shadow-xl p-6 w-96 relative">
+    <button (click)="closeDepositModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">✕</button>
+
+    <h2 class="text-lg font-semibold text-center mb-2">เติมเงิน</h2>
+    <p class="text-sm text-gray-500 text-center mb-4">เลือกจำนวนเงินที่ต้องการ หรือกรอกจำนวนเงินที่ท่านต้องการ</p>
+
+    <input type="number" placeholder="กรุณากรอกจำนวนเงิน"
+           class="w-full border p-2 rounded mb-4 text-center "/>
+    <div class="flex justify-center gap-3 mb-6">
+      <button class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">100</button>
+      <button class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">200</button>
+      <button class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">500</button>
+    </div>
+
+    <div class="flex justify-center gap-6">
+      <button (click)="closeDepositModal()" class="px-6 py-2 rounded border border-red-400 text-red-500 hover:bg-red-50">
+        ยกเลิก
+      </button>
+      <button class="px-6 py-2 rounded border border-green-500 text-green-600 hover:bg-green-50">
+        ยืนยัน
+      </button>
+    </div>
+  </div>
+</div>
