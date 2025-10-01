@@ -7,7 +7,8 @@ import { MovieDetails } from './user-pages/movie-details/movie-details';
 import { Mybasket } from './user-pages/mybasket/mybasket';
 import { TstHistory } from './user-pages/tst-history/tst-history';
 import { Mygame } from './user-pages/mygame/mygame';
-
+import { Profile } from './user-pages/profile/profile';
+import {EditProfile } from './user-pages/edit-profile/edit-profile';
 
 export const routes: Routes = [
     {path: '', component: Login },
@@ -16,5 +17,7 @@ export const routes: Routes = [
     {path: 'movie-details', component: MovieDetails },
     {path: 'mybasket', component: Mybasket},
     {path: 'tst-history', component: TstHistory},
-    {path: 'mygame', component: Mygame}
+    {path: 'mygame', component: Mygame},
+    {path: 'profile', component: Profile},
+    {path: 'edit_profile', component: EditProfile}
 ];

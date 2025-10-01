@@ -1,0 +1,59 @@
+<div class="flex h-screen">
+  <app-navbar></app-navbar>
+
+  <!-- Main -->
+  <main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
+    <div class="flex flex-col items-center justify-center h-full">
+      <div class="border border-gray-300 rounded-lg p-8 w-96 bg-white shadow-md">
+        <h1 class="text-2xl font-semibold mb-6 text-center">แก้ไขโปรไฟล์</h1>
+
+        <!-- Avatar Upload -->
+        <div class="flex flex-col items-center mb-6">
+          <div class="w-28 h-28 rounded-full overflow-hidden shadow-md">
+            <img [src]="profileImage || 'https://imgv3.fotor.com/images/blog-cover-image/10-profile-picture-ideas-to-make-you-stand-out.jpg'" 
+                 alt="avatar" 
+                 class="w-full h-full object-cover">
+          </div>
+          <label class="mt-3 cursor-pointer text-blue-500 text-sm hover:underline">
+            เปลี่ยนรูปโปรไฟล์
+            <input type="file" class="hidden" (change)="onFileSelected($event)">
+          </label>
+        </div>
+
+        <!-- Form -->
+        <form class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">ชื่อผู้ใช้</label>
+            <input type="text" [(ngModel)]="username" name="username"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">อีเมล</label>
+            <input type="email" [(ngModel)]="email" name="email"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">ยอดเงินคงเหลือ</label>
+            <input type="number" [(ngModel)]="balance" name="balance"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:outline-none">
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex justify-between mt-6">
+            <button routerLink="/profile"
+              class="px-5 py-2 bg-gray-300 text-gray-800 rounded-lg shadow hover:bg-gray-400 transition-all">
+              ยกเลิก
+            </button>
+
+            <button type="submit"
+              class="px-5 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-all">
+              บันทึก
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
