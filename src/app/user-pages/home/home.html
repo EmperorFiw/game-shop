@@ -5,6 +5,8 @@
     <!-- Search -->
     <div class="flex items-center justify-between mb-6">
       <input type="text" placeholder="ค้นหาเกมที่คุณต้องการ"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch(searchTerm)"
         class="w-full border border-red-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" />
       <button routerLink="/mybasket" class="ml-3 text-red-500">
         <i class="fas fa-shopping-cart"></i>
@@ -13,47 +15,53 @@
 
     <!-- Category -->
     <div class="flex flex-wrap items-center gap-2 mb-6">
-      <button class="px-4 py-1 rounded border border-red-500 text-black hover:bg-red-100">ทั้งหมด</button>
-      <button class="px-4 py-1 rounded border border-red-500 text-black hover:bg-red-100">FPS</button>
-      <button class="px-4 py-1 rounded border border-red-500 text-black hover:bg-red-100">Moba</button>
-      <button class="px-4 py-1 rounded border border-red-500 text-black hover:bg-red-100">MMO RPG</button>
-      <button class="px-4 py-1 rounded border border-red-500 text-black hover:bg-red-100">Casual</button>
+      <button *ngFor="let cat of categories"
+        (click)="filterGames(cat)"
+        class="px-4 py-1 rounded border border-red-500"
+        [ngClass]="{'bg-red-500 text-white': selectedCategory===cat}">
+        {{ cat }}
+      </button>
+    </div>
+
+
+    <!-- เลือกวันที่ -->
+    <div class="flex gap-2 mb-3">
+      <input type="date" [(ngModel)]="startDate" (change)="loadTopGames()" class="border px-2 py-1 rounded">
+      <input type="date" [(ngModel)]="endDate" (change)="loadTopGames()" class="border px-2 py-1 rounded">
     </div>
 
     <!-- Top 5 -->
     <div class="mb-6">
       <h2 class="text-lg font-semibold">
         Top 5 Popular
-        <span class="text-gray-500 text-sm">ประจำวันที่ 1 - 30 - 2568</span>
+        <span class="text-gray-500 text-sm">
+          ประจำวันที่ {{ formatDate(startDate) }} - {{ formatDate(endDate) }}
+        </span>
       </h2>
-      <div
-        class="border border-red-300 rounded-lg h-60 mt-3 flex justify-center items-center overflow-x-auto space-x-4 p-3">
-        <img routerLink="/movie-details" src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042"
-          class="h-full rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042"
-          class="h-full rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042"
-          class="h-full rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042"
-          class="h-full rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042"
-          class="h-full rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
+      <div class="border border-red-300 rounded-lg h-60 mt-3 flex justify-center items-center overflow-x-auto space-x-4 p-3">
+        <ng-container *ngFor="let game of topGames">
+          <img [routerLink]="['/movie-details', game.id]" 
+              [src]="getGameImage(game.image)" 
+              [alt]="game.name"
+              class="h-full rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
+        </ng-container>
       </div>
     </div>
 
     <!-- All Games -->
     <h2 class="text-xl font-semibold mb-4">เกมทั้งหมด</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Game Card -->
-      <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
-        <img routerLink="/movie-details" src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042"
-          class="rounded-lg shadow-md mb-4 cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
-        <h3 class="font-medium text-center mb-2">Battlefield 2042</h3>
-        <span class="text-green-600 font-bold mb-2">490 ฿</span>
+      <div *ngFor="let game of games" class="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
+        <img [routerLink]="['/movie-details', game.id]"
+             [src]="getGameImage(game.image)"
+             [alt]="game.name"
+             class="rounded-lg shadow-md mb-4 cursor-pointer hover:scale-105 transition-transform duration-200 object-cover">
+        <h3 class="font-medium text-center mb-2">{{ game.name }}</h3>
+        <p class="text-sm text-gray-500 mb-2 text-center">{{ game.description }}</p>
+        <span class="text-green-600 font-bold mb-2">{{ game.price }} ฿</span>
+        <span class="text-xs text-gray-400 mb-2">{{ game.category }}</span>
         <div class="flex gap-2">
-          <button class="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600">
-            ซื้อเลยย
-          </button>
+          <button class="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600" (click)="confirmPurchase(game)">ซื้อเลย</button>
           <button class="px-3 py-1 border rounded text-gray-600 hover:bg-gray-100">
             <i class="fas fa-shopping-cart"></i>
           </button>

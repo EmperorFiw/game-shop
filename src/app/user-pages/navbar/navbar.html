@@ -4,15 +4,15 @@
   <!-- Profile Section -->
   <div class="flex items-center space-x-4 mb-10 pt-4">
     <div routerLink="/profile"
-      class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
-      <img src="https://imgv3.fotor.com/images/blog-cover-image/10-profile-picture-ideas-to-make-you-stand-out.jpg" alt="avatar" 
+      class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg overflow-hidden cursor-pointer">
+      <img [src]="getProfileImage(user.profileImage)" alt="avatar" 
           class="w-full h-full object-cover rounded-full">
     </div>
 
     <div class="flex flex-col">
-      <span class="text-lg font">Username</span>
+      <span class="text-lg font">{{user?.username}}</span>
       <div class="flex items-center text-xs text-blue-300 mt-1">
-        <span>ยอดเงินคงเหลือ</span>
+        <span>ยอดเงินคงเหลือ {{user.money}} ฿</span>
       </div>
     </div>
   </div>
@@ -62,8 +62,7 @@
       </li>
 
       <!-- ออกจากระบบ -->
-      <li
-          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg mt-8 transition-all duration-300 hover:bg-red-500 hover:bg-opacity-10 hover:translate-x-1">
+      <li  (click)="logout()" class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg mt-8 transition-all duration-300 hover:bg-red-500 hover:bg-opacity-10 hover:translate-x-1">
         <div class="w-6 text-center">
           <i class="fas fa-sign-out-alt text-red-400"></i>
         </div>
@@ -81,21 +80,26 @@
     <h2 class="text-lg font-semibold text-center mb-2">เติมเงิน</h2>
     <p class="text-sm text-gray-500 text-center mb-4">เลือกจำนวนเงินที่ต้องการ หรือกรอกจำนวนเงินที่ท่านต้องการ</p>
 
-    <input type="number" placeholder="กรุณากรอกจำนวนเงิน"
-           class="w-full border p-2 rounded mb-4 text-center "/>
+    <!-- กรอกจำนวนเงิน -->
+    <input type="number" [(ngModel)]="depositAmount" placeholder="กรุณากรอกจำนวนเงิน"
+           class="w-full border p-2 rounded mb-4 text-center" />
+
+    <!-- ปุ่มเลือก -->
     <div class="flex justify-center gap-3 mb-6">
-      <button class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">100</button>
-      <button class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">200</button>
-      <button class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">500</button>
+      <button (click)="setAmount(100)" class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">100</button>
+      <button (click)="setAmount(200)" class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">200</button>
+      <button (click)="setAmount(500)" class="px-6 py-2 rounded border border-gray-300 bg-white hover:bg-gray-100">500</button>
     </div>
 
+    <!-- ปุ่มยกเลิก / ยืนยัน -->
     <div class="flex justify-center gap-6">
       <button (click)="closeDepositModal()" class="px-6 py-2 rounded border border-red-400 text-red-500 hover:bg-red-50">
         ยกเลิก
       </button>
-      <button class="px-6 py-2 rounded border border-green-500 text-green-600 hover:bg-green-50">
+      <button (click)="confirmDeposit()" class="px-6 py-2 rounded border border-green-500 text-green-600 hover:bg-green-50">
         ยืนยัน
       </button>
     </div>
   </div>
 </div>
+

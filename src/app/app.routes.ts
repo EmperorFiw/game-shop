@@ -4,25 +4,28 @@ import { Login } from './user-pages/login/login';
 import { Register } from './user-pages/register/register';
 
 // User
+import { EditProfile } from './user-pages/edit-profile/edit-profile';
 import { MovieDetails } from './user-pages/movie-details/movie-details';
 import { Mybasket } from './user-pages/mybasket/mybasket';
-import { TstHistory } from './user-pages/tst-history/tst-history';
 import { Mygame } from './user-pages/mygame/mygame';
 import { Profile } from './user-pages/profile/profile';
-import {EditProfile } from './user-pages/edit-profile/edit-profile';
+import { TstHistory } from './user-pages/tst-history/tst-history';
 
 // admin
 import { AdminHome } from './admin-pages/admin-home/admin-home';
-import {ManageGame} from   './admin-pages/manage-game/manage-game';
 import { AdminTstHistory } from './admin-pages/admin-tst-history/admin-tst-history';
 import { DiscountCode } from './admin-pages/discount-code/discount-code';
+import { ManageGame } from './admin-pages/manage-game/manage-game';
+import { guestGuard } from './service/auth.guard';
+
 export const routes: Routes = [
-    {path: '', component: Login },
-    {path: 'register', component: Register },
+	{ path: '', component: Login, canActivate: [guestGuard] },
+	{ path: 'login', component: Login, canActivate: [guestGuard] },
+	{ path: 'register', component: Register, canActivate: [guestGuard] },
 
     // user
     {path: 'home', component: Home },
-    {path: 'movie-details', component: MovieDetails },
+    {path: 'movie-details/:id', component: MovieDetails },
     {path: 'mybasket', component: Mybasket},
     {path: 'tst-history', component: TstHistory},
     {path: 'mygame', component: Mygame},

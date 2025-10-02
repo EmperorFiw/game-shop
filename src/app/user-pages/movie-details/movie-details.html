@@ -1,42 +1,42 @@
 <div class="flex h-screen">
-  <app-navbar></app-navbar>
-<!-- main details -->
-<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
-    <button routerLink="/home" class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
+    <app-navbar></app-navbar>
+  
+    <!-- main details -->
+    <main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto" *ngIf="game">
+      <button (click)="location.back()" class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
         ย้อนกลับ
-    </button>
-    <h2 class="text-xl font-semibold mb-4">รายละเอียด</h2>
-    <div class="flex flex-col md:flex-row gap-6">
+      </button>
+      <h2 class="text-xl font-semibold mb-4">รายละเอียด</h2>
+      <div class="flex flex-col md:flex-row gap-6">
         <!-- Game Image -->
         <div class="flex flex-col items-center">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042" class="rounded-lg shadow-lg w-60 md:w-64 object-cover">
-        <span class="mt-3 px-4 py-2 bg-green-500 text-red-600 font-semibold rounded-lg text-center w-60 md:w-64">490 ฿</span>
+          <img [src]="getGameImage(game.image)" [alt]="game.name" class="rounded-lg shadow-lg w-60 md:w-64 object-cover">
+          <span class="mt-3 px-4 py-2 bg-green-500 text-red-600 font-semibold rounded-lg text-center w-60 md:w-64">
+            {{ game.price }} ฿
+          </span>
         </div>
-
+  
         <!-- Game Info -->
         <div class="flex-1 flex flex-col ml-2">
-        <div>
-            <h3 class="text-2xl font-bold mb-1">Battlefield 2042</h3>
-            <p class="text-sm text-gray-600 mb-2">ประเภทเกม : FPS</p>
-            <p class="text-gray-700 mb-2">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat eius amet minima eum! Deleniti eligendi laboriosam, quod, explicabo, accusamus asperiores earum perferendis animi eaque facere reprehenderit cumque possimus eum nihil?
-            </p>
-            <p class="text-gray-600 mb-1">วันวางจำหน่าย : 1 ตุลาคม 2568</p>
-            <p class="text-gray-600 mb-3">Ranking : 12</p>
-
-            <!-- Buttons ตะกร้า กับ ปุ่มซื้อ -->
+          <div>
+            <h3 class="text-2xl font-bold mb-1">{{ game.name }}</h3>
+            <p class="text-sm text-gray-600 mb-2">ประเภทเกม : {{ game.category }}</p>
+            <p class="text-gray-700 mb-2">{{ game.description }}</p>
+            <p class="text-gray-600 mb-1">วันวางจำหน่าย : {{ game.release_date | date:'d MMMM yyyy' }}</p>
+            <p class="text-gray-600 mb-3">Ranking : {{ game.ranking }}</p>
+  
+            <!-- Buttons -->
             <div class="flex gap-4 pt-5">
-            <button class="flex items-center justify-center border border-red-400 text-red-400 px-4 py-2 rounded-lg hover:bg-red-50 transition-all">
+              <button class="flex items-center justify-center border border-red-400 text-red-400 px-4 py-2 rounded-lg hover:bg-red-50 transition-all">
                 <i class="fas fa-shopping-cart mr-2"></i>
-            </button>
-            <button class="flex justify-center w-1/2 bg-green-400 text-white text-center px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
+              </button>
+              <button (click)="confirmPurchase()" class="flex justify-center w-1/2 bg-green-400 text-white text-center px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
                 ซื้อดิรออะไร!
-            </button>
+              </button>
             </div>
+          </div>
         </div>
-        </div>
-    </div>
-</main>
-
-
-</div>
+      </div>
+    </main>
+  </div>
+  

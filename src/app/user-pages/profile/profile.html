@@ -7,12 +7,12 @@
       <div class="border border-red-400 rounded-lg p-8 w-80 text-center bg-white shadow-md">
         <h1 class="text-2xl font-semibold mb-6">โปรไฟล์</h1>
         <!-- Avatar -->
-        <img src="https://imgv3.fotor.com/images/blog-cover-image/10-profile-picture-ideas-to-make-you-stand-out.jpg" alt="avatar" 
+        <img [src]="getProfileImage(user.profileImage)" alt="avatar" 
         class="w-28 h-28 rounded-full mx-auto mb-4 object-cover shadow">
 
-        <h2 class="font-bold text-lg">Username</h2>
-        <p class="mt-2 text-gray-700">ยอดเงินคงเหลือ : 100 บาท</p>
-        <p class="mt-1 text-gray-600">Email : test@test.com</p>
+        <h2 class="font-bold text-lg">{{user.username}}</h2>
+        <p class="mt-2 text-gray-700">ยอดเงินคงเหลือ : {{user.money}} บาท</p>
+        <p class="mt-1 text-gray-600">Email : {{user.email}}</p>
 
         <button routerLink="/edit_profile"
             class="mt-6 px-6 py-2 bg-yellow-500 text-white font-medium rounded-lg shadow-md hover:bg-yellow-600 hover:shadow-lg transition-all duration-200">

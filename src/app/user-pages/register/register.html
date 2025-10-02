@@ -59,60 +59,73 @@
         <h2 class="text-xl font-bold text-gray-800 mb-1 ">สมัครสมาชิก</h2>
         <p class="text-gray-500 text-xs">กรุณากรอกข้อมูลเพื่อสมัครสมาชิก</p>
       </div> 
-          <div class="flex justify-center mb-4">
-      <div class="relative w-20 h-20">
-        <img [src]="profileImage " alt="" class="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-md cursor-pointer"(click)="fileInput.click()"/>
-        <input type="file" #fileInput accept="image/*"class="hidden"(change)="onFileSelected($event)"/>
-        <div class="absolute bottom-0 right-0 bg-blue-500 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs shadow-md cursor-pointer"(click)="fileInput.click()">
-          <i class="fas fa-plus"></i>
+        <div class="flex justify-center mb-4">
+          <div class="relative w-20 h-20 cursor-pointer" (click)="fileInput.click()">
+            <img [src]="profileImage" alt="profile" class="w-full h-full rounded-full object-cover border-2 border-gray-300 shadow-md"/>
+            <input type="file" #fileInput accept="image/*" class="hidden" (change)="onFileSelected($event)"/>
+            <div class="absolute bottom-0 right-0 bg-blue-500 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs shadow-md">
+              <i class="fas fa-plus"></i>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       
-      <form class="space-y-4">
-        <!-- Username -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">username</label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i class="fas fa-user text-gray-400 text-sm"></i>
+        <form class="space-y-4">
+          <!-- Username -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">username</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-user text-gray-400 text-sm"></i>
+              </div>
+              <input type="text"
+                     [(ngModel)]="username"
+                     name="username"
+                     class="w-full pl-9 pr-3 py-2 text-sm rounded-sm border border-gray-300 box-border"
+                     placeholder="username">
             </div>
-            <input type="text"class="w-full pl-9 pr-3 py-2 text-sm rounded-sm border border-gray-300 rounded-sm box-border" placeholder="username">
           </div>
-        </div>
-        <!-- Email -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1 ">email</label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i class="fas fa-envelope text-gray-400 text-sm"></i>
-            </div>
-            <input type="email"class="w-full pl-9 pr-3 py-2 text-sm  border border-gray-300 rounded-sm " placeholder="email">
-          </div>
-        </div>
         
-        <!-- Password -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">password</label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i class="fas fa-lock text-gray-400 text-sm"></i>
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1 ">email</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-envelope text-gray-400 text-sm"></i>
+              </div>
+              <input type="email"
+                     [(ngModel)]="email"
+                     name="email"
+                     class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-sm"
+                     placeholder="email">
             </div>
-            <input type="password" class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-sm box-border" placeholder="password">
           </div>
-        </div>
-                <!-- Register link -->
-        <div class="text-center text-xs">
-          <p class="text-gray-600">ยังไม่มีบัญชี? 
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">เข้าสู่ระบบ</a>
-          </p>
-        </div>
-
-        <!-- Button -->
-      <button type="button" class="w-full bg-green-500 text-white py-2 rounded-lg font-sans text-sm  ">
-        เข้าสู่ระบบ
-      </button>
-      </form>
+        
+          <!-- Password -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">password</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-lock text-gray-400 text-sm"></i>
+              </div>
+              <input type="password"
+                     [(ngModel)]="password"
+                     name="password"
+                     class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-sm box-border"
+                     placeholder="password">
+            </div>
+          </div>
+          <div class="text-center text-xs">
+            <p class="text-gray-600">มีบัญชีอยู่แล้ว? 
+              <a href="/login" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">เข้าสู่ระบบ</a>
+            </p>
+          </div>
+          <!-- Button -->
+          <button (click)="Register()" type="button"
+                  class="w-full bg-green-500 text-white py-2 rounded-lg font-sans text-sm">
+            สมัครสมาชิก
+          </button>
+        </form>
+        
     </div>
   </main>
 </div>
