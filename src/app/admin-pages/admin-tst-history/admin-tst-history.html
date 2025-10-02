@@ -1,7 +1,52 @@
 <div class="flex h-screen">
   <app-navbar></app-navbar>
 
-  <main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
-    
-  </main>
+<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
+  <div class="max-w-6xl mx-auto">
+    <!-- หัวข้อ -->
+    <h1 class="text-2xl font-bold mb-6">ประวัติธุรกรรม</h1>
+
+    <!-- ฟอร์มค้นหา -->
+    <div class="flex flex-wrap gap-4 mb-6">
+      <!-- ค้นหาผู้ใช้ -->
+      <div class="flex-1 min-w-[250px]">
+        <label class="block text-sm font-medium mb-1">ค้นหาผู้ใช้</label>
+        <input type="text" placeholder="ใส่อีเมลของผู้ใช้"
+          class="w-full border border-red-500 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-red-500" />
+      </div>
+
+      <!-- ประเภทธุรกรรม -->
+      <div class="flex-1 min-w-[200px]">
+        <label class="block text-sm font-medium mb-1">ประเภทธุรกรรม</label>
+        <select class="w-full border border-red-500 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-red-500">
+          <option>ทั้งหมด</option>
+          <option>ซื้อเกม</option>
+          <option>ใช้โค้ดส่วนลด</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ตารางแสดงข้อมูล -->
+    <div class="overflow-x-auto border border-red-500 rounded-md">
+      <table class="min-w-full text-left">
+        <thead class="bg-red-50">
+          <tr>
+            <th class="px-4 py-2 border-b border-red-500">วันที่</th>
+            <th class="px-4 py-2 border-b border-red-500">ผู้ใช้</th>
+            <th class="px-4 py-2 border-b border-red-500">ประเภท</th>
+            <th class="px-4 py-2 border-b border-red-500">รายการ</th>
+            <th class="px-4 py-2 border-b border-red-500">ราคา</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <!-- ตัวอย่างแถวว่าง -->
+          <tr>
+            <td class="px-4 py-2 border-b border-red-500" colspan="5" align="center">ไม่มีข้อมูล</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
 </div>

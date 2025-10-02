@@ -1,10 +1,10 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+// import { RouterLink } from '@angular/router';
 import { Navbar } from "../navbar/navbar";
 @Component({
   selector: 'app-mybasket',
-  imports: [Navbar,RouterLink, CommonModule],
+  imports: [Navbar, CommonModule],
   templateUrl: './mybasket.html',
   styleUrl: './mybasket.scss'
 })
