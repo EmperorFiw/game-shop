@@ -16,7 +16,7 @@ import { AdminHome } from './admin-pages/admin-home/admin-home';
 import { AdminTstHistory } from './admin-pages/admin-tst-history/admin-tst-history';
 import { DiscountCode } from './admin-pages/discount-code/discount-code';
 import { ManageGame } from './admin-pages/manage-game/manage-game';
-import { guestGuard } from './service/auth.guard';
+import { adminGuard, authGuard, guestGuard } from './service/auth.guard';
 
 export const routes: Routes = [
 	{ path: '', component: Login, canActivate: [guestGuard] },
@@ -24,19 +24,19 @@ export const routes: Routes = [
 	{ path: 'register', component: Register, canActivate: [guestGuard] },
 
     // user
-    {path: 'home', component: Home },
-    {path: 'movie-details/:id', component: MovieDetails },
-    {path: 'mybasket', component: Mybasket},
-    {path: 'tst-history', component: TstHistory},
-    {path: 'mygame', component: Mygame},
-    {path: 'profile', component: Profile},
-    {path: 'edit_profile', component: EditProfile},
+    {path: 'home', component: Home, canActivate: [authGuard]},
+    {path: 'movie-details/:id', component: MovieDetails, canActivate: [authGuard] },
+    {path: 'mybasket', component: Mybasket, canActivate: [authGuard] },
+    {path: 'tst-history', component: TstHistory, canActivate: [authGuard] },
+    {path: 'mygame', component: Mygame, canActivate: [authGuard] },
+    {path: 'profile', component: Profile, canActivate: [authGuard] },
+    {path: 'edit_profile', component: EditProfile, canActivate: [authGuard] },
 
     // admin
-    {path: 'admin-home', component: AdminHome},
-    {path: 'manage-game', component: ManageGame},
-    {path: 'admin-tst-history', component: AdminTstHistory},
-    {path: 'discount-code', component: DiscountCode}
+    {path: 'admin-home', component: AdminHome, canActivate: [adminGuard] },
+    {path: 'manage-game', component: ManageGame, canActivate: [adminGuard]},
+    {path: 'admin-tst-history', component: AdminTstHistory, canActivate: [adminGuard]},
+    {path: 'discount-code', component: DiscountCode, canActivate: [adminGuard]}
 
 ];
 // discount-code

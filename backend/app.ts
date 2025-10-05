@@ -12,13 +12,15 @@ import user from "./controller/user/user";
 
 export const app = express();
 
-app.use(cors({
-    origin: "http://localhost:4200",
-    methods: ["GET","POST","PUT","DELETE"],
-    allowedHeaders: ["Content-Type","Authorization"]
-  }));
+// app.use(cors({
+//     origin: "http://localhost:4200",
+//     methods: ["GET","POST","PUT","DELETE"],
+//     allowedHeaders: ["Content-Type","Authorization"]
+//   }));
+app.use(cors());
 
 app.use(bodyParser.json());
+
 
 app.use("/api/auth", register);
 app.use("/api/auth", login);

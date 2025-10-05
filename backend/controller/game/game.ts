@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getAllGames, getGameById, getTopGames, increaseGameSold } from "../../models/game";
-import { addPurchase } from "../../models/purchase";
+import { addPurchase, hasPurchased } from "../../models/purchase";
 import { getUserByUsername, updateUserMoney } from "../../models/user";
 
 const router = Router();
@@ -49,8 +49,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-import { hasPurchased } from "../../models/purchase";
-
 router.post("/purchase", async (req: any, res) => {
   const { gameId } = req.body;
   const { username } = req.auth;
@@ -72,11 +70,9 @@ router.post("/purchase", async (req: any, res) => {
     if (user.money < game.price) {
       return res.status(400).json({ status: false, message: "ยอดเงินไม่เพียงพอ" });
     }
-
     // หักเงิน
     const newMoney = user.money - game.price;
     await updateUserMoney(user.ID, newMoney);
-
     // insert purchase_history
     await addPurchase(user.ID, game.id, game.price);
 

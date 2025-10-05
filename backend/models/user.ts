@@ -10,6 +10,13 @@ export interface User {
   role: string;
 }
 
+export interface UserProfileUpdate {
+	username: string;
+	email: string;
+	balance: number;
+	avatar?: string | null;
+}
+
 //  ดึง user ด้วย email หรือ username
 export async function getUserByEmailOrUsername(value: string, by: "email" | "username"): Promise<User | null> {
   const query = `SELECT * FROM users WHERE ${by} = ? LIMIT 1`;
@@ -42,6 +49,7 @@ export async function getUserInfo(username: string): Promise<Partial<User> | nul
   );
   return rows.length > 0 ? rows[0] : null;
 }
+
 export async function getUserByUsername(username: string) {
 	const [rows]: any = await db.query("SELECT * FROM users WHERE username = ?", [username]);
 	return rows.length > 0 ? rows[0] : null;
@@ -57,4 +65,13 @@ export async function getUserIDByName(username: string): Promise<number | null> 
 // อัปเดตเงิน user
 export async function updateUserMoney(uid: number, newMoney: number) {
 	await db.query("UPDATE users SET money = ? WHERE ID = ?", [newMoney, uid]);
+}
+
+export async function updateUserProfile(currentUser: string, data: UserProfileUpdate): Promise<boolean> {
+	const { username, email, balance, avatar } = data;
+	await db.query(
+		"UPDATE users SET username = ?, email = ?, money = ?, profile_image = ? WHERE username = ?",
+		[username, email, balance, avatar, currentUser]
+	);
+	return true;
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../service/auth';
 
@@ -13,7 +13,7 @@ import { AuthService } from '../../service/auth';
 	imports: [CommonModule, FormsModule, RouterModule],
 })
 export class Register {
-	constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService, private router: Router) {}
 
 	profileImage: string | ArrayBuffer | null = null;
 	username: string = "";
@@ -63,6 +63,8 @@ export class Register {
 						icon: 'success',
 						title: res.message,
 						showConfirmButton: true
+					}).then(() => {
+						this.router.navigate(['/home']);
 					});
 				} else {
 					Swal.fire({
