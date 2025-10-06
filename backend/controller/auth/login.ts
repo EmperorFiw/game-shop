@@ -30,6 +30,7 @@ router.post("/login", async (req, res) => {
 
     // JWT token
     const payload = {
+      uid: user.id,
       username: user.username,
       profileImage: user.profile_image,
       email: user.email,

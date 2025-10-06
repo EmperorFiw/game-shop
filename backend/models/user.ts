@@ -62,6 +62,13 @@ export async function getUserIDByName(username: string): Promise<number | null> 
   );
   return rows.length > 0 ? rows[0].id : null;
 }
+export async function getUserNameByID(id: number): Promise<String | null> {
+  const [rows]: any = await db.query(
+    "SELECT username FROM users WHERE id = ? LIMIT 1",
+    [id]
+  );
+  return rows.length > 0 ? rows[0].id : null;
+}
 // อัปเดตเงิน user
 export async function updateUserMoney(uid: number, newMoney: number) {
 	await db.query("UPDATE users SET money = ? WHERE ID = ?", [newMoney, uid]);

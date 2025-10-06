@@ -1,11 +1,11 @@
 import { expressjwt } from "express-jwt";
 import jwt from "jsonwebtoken";
 
-export const secret = process.env.JWT_SECRET || "";
+export const secret = process.env.JWT_SECRET || "15151";
 
-if (!secret) {
-  throw new Error("JWT_SECRET environment variable is required but not defined");
-}
+// if (!secret) {
+//   throw new Error("JWT_SECRET environment variable is required but not defined");
+// }
 
 export const jwtAuthen = expressjwt({
   secret: secret,

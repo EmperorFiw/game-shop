@@ -4,7 +4,7 @@ import fs from "fs";
 import multer from "multer";
 import path from "path";
 import { addDepositHistory, depositMoney } from "../../models/game";
-import { getUserIDByName, getUserInfo, updateUserProfile, User } from "../../models/user";
+import { getUserIDByName, getUserInfo, getUserNameByID, updateUserProfile, User } from "../../models/user";
 
 
 const router = Router();
@@ -72,12 +72,12 @@ router.post("/deposit", async (req: any, res: Response) => {
 // -----------------------------------
 router.post("/update", upload.single("avatar"), async (req: any, res: Response) => {
 	try {
-		const { username: currentUser } = req.auth;
+		const { uid: id } = req.auth;
 		const { username, email, balance } = req.body;
 		const file = req.file;
 
 		//  ดึงข้อมูลผู้ใช้เดิม
-		const oldUser = (await getUserInfo(currentUser)) as User | null;
+		const oldUser = (await getUserNameByID(id)) as User | null;
 		if (!oldUser) {
 			if (file && fs.existsSync(file.path)) fs.unlinkSync(file.path);
 			return res.status(404).json({ status: false, message: "ไม่พบผู้ใช้" });
@@ -106,7 +106,7 @@ router.post("/update", upload.single("avatar"), async (req: any, res: Response) 
 		}
 
 		//  อัปเดตข้อมูลในฐานข้อมูล
-		await updateUserProfile(currentUser, {
+		await updateUserProfile(username, {
 			username,
 			email,
 			balance: Number(balance),
