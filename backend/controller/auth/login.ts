@@ -1,22 +1,20 @@
 import bcrypt from "bcrypt";
 import { Router } from "express";
-import { getUserByEmailOrUsername } from "../../models/user";
+import { getUserByEmail } from "../../models/user";
 import { generateToken } from "./authen";
 
 const router = Router();
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, password } = req.body;
 
-    if ((!email && !username) || !password) {
+    if ((!email) || !password) {
       return res.status(400).json({ status: false, message: "กรอกข้อมูลไม่ครบ" });
     }
 
     // ดึง user
-    const user = email 
-      ? await getUserByEmailOrUsername(email, "email") 
-      : await getUserByEmailOrUsername(username, "username");
+    const user = await getUserByEmail(email);
 
     if (!user) {
       return res.json({ status: false, message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
@@ -30,7 +28,7 @@ router.post("/login", async (req, res) => {
 
     // JWT token
     const payload = {
-      uid: user.id,
+      id: user.id,
       username: user.username,
       profileImage: user.profile_image,
       email: user.email,

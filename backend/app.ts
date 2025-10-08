@@ -4,6 +4,7 @@ dotenv.config();
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
+import admin from "./controller/admin/admin";
 import { jwtAuthen } from "./controller/auth/authen";
 import login from "./controller/auth/login";
 import register from "./controller/auth/register";
@@ -35,3 +36,4 @@ app.use(jwtAuthen, (err: any, req: any, res: any, next: any) => {
 
 app.use("/api/user", jwtAuthen, user);
 app.use("/api/game", jwtAuthen, game);
+app.use("/api/admin", jwtAuthen, admin);

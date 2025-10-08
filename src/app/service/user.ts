@@ -32,11 +32,25 @@ export class UserService {
 		return this.http.get(`${this.apiUrl}/user/me`, { headers });
 	}
 
+	getHistory(): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.get(`${this.apiUrl}/user/history/all`, { headers });
+	}
+
+	getGameHistory(): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.get(`${this.apiUrl}/user/history/game`, { headers });
+	}
+
   updateProfile(data: FormData): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authService.getToken()}`
     });
-    return this.http.post(`${this.apiUrl}/user/update`, data, { headers });
+    return this.http.put(`${this.apiUrl}/user/update`, data, { headers });
   }
   
 	//  ตรวจสอบว่าเป็นแอดมินหรือไม่ 

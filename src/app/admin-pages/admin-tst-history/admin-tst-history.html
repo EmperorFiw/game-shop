@@ -1,52 +1,87 @@
 <div class="flex h-screen">
   <app-navbar></app-navbar>
 
-<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
-  <div class="max-w-6xl mx-auto">
-    <!-- หัวข้อ -->
-    <h1 class="text-2xl font-bold mb-6">ประวัติธุรกรรม</h1>
+  <main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-2xl font-bold mb-6">ประวัติธุรกรรม</h1>
 
-    <!-- ฟอร์มค้นหา -->
-    <div class="flex flex-wrap gap-4 mb-6">
-      <!-- ค้นหาผู้ใช้ -->
-      <div class="flex-1 min-w-[250px]">
-        <label class="block text-sm font-medium mb-1">ค้นหาผู้ใช้</label>
-        <input type="text" placeholder="ใส่อีเมลของผู้ใช้"
-          class="w-full border border-red-500 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-red-500" />
+      <!-- ฟอร์มค้นหา -->
+      <div class="flex flex-wrap gap-4 mb-6">
+        <!-- ค้นหาผู้ใช้ -->
+        <div class="flex-1 min-w-[250px]">
+          <label class="block text-sm font-medium mb-1">ค้นหาผู้ใช้</label>
+          <input
+            type="text"
+            placeholder="ใส่ชื่อผู้ใช้หรืออีเมล"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+            class="w-full border border-red-500 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-red-500"
+          />
+        </div>
+
+        <!-- ประเภทธุรกรรม -->
+        <div class="flex-1 min-w-[200px]">
+          <label class="block text-sm font-medium mb-1">ประเภทธุรกรรม</label>
+          <select
+            [(ngModel)]="selectedType"
+            (change)="applyFilters()"
+            class="w-full border border-red-500 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-red-500"
+          >
+            <option>ทั้งหมด</option>
+            <option>ซื้อเกม</option>
+            <option>เติมเงิน</option>
+          </select>
+        </div>
       </div>
 
-      <!-- ประเภทธุรกรรม -->
-      <div class="flex-1 min-w-[200px]">
-        <label class="block text-sm font-medium mb-1">ประเภทธุรกรรม</label>
-        <select class="w-full border border-red-500 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-red-500">
-          <option>ทั้งหมด</option>
-          <option>ซื้อเกม</option>
-          <option>ใช้โค้ดส่วนลด</option>
-        </select>
+      <!-- ตาราง -->
+      <div class="overflow-x-auto border border-red-500 rounded-md">
+        <table class="min-w-full text-left">
+          <thead class="bg-red-50">
+            <tr>
+              <th class="px-4 py-2 border-b border-red-500">วันที่</th>
+              <th class="px-4 py-2 border-b border-red-500">ผู้ใช้</th>
+              <th class="px-4 py-2 border-b border-red-500">ประเภท</th>
+              <th class="px-4 py-2 border-b border-red-500">รายการ</th>
+              <th class="px-4 py-2 border-b border-red-500">ราคา</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <!-- โหลด -->
+            <tr *ngIf="loading">
+              <td colspan="5" class="px-4 py-3 text-center text-gray-500">กำลังโหลดข้อมูล...</td>
+            </tr>
+
+            <!-- error -->
+            <tr *ngIf="!loading && errorMessage">
+              <td colspan="5" class="px-4 py-3 text-center text-red-500">{{ errorMessage }}</td>
+            </tr>
+
+            <!-- ไม่มีข้อมูล -->
+            <tr *ngIf="!loading && !errorMessage && filteredTransactions.length === 0">
+              <td colspan="5" class="px-4 py-3 text-center text-gray-500">ไม่มีข้อมูล</td>
+            </tr>
+
+            <!-- แสดงข้อมูล -->
+            <tr *ngFor="let t of filteredTransactions">
+              <td class="px-4 py-2 border-b border-red-500">{{ t.created_at | date:'medium' }}</td>
+              <td class="px-4 py-2 border-b border-red-500">{{ t.username }}</td>
+              <td class="px-4 py-2 border-b border-red-500">
+                <span
+                  [ngClass]="{
+                    'text-green-600 font-medium': t.type === 'purchase',
+                    'text-blue-600 font-medium': t.type === 'deposit'
+                  }"
+                >
+                  {{ t.type === 'purchase' ? 'ซื้อเกม' : 'เติมเงิน' }}
+                </span>
+              </td>
+              <td class="px-4 py-2 border-b border-red-500">{{ t.item_name }}</td>
+              <td class="px-4 py-2 border-b border-red-500">{{ t.price }} บาท</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <!-- ตารางแสดงข้อมูล -->
-    <div class="overflow-x-auto border border-red-500 rounded-md">
-      <table class="min-w-full text-left">
-        <thead class="bg-red-50">
-          <tr>
-            <th class="px-4 py-2 border-b border-red-500">วันที่</th>
-            <th class="px-4 py-2 border-b border-red-500">ผู้ใช้</th>
-            <th class="px-4 py-2 border-b border-red-500">ประเภท</th>
-            <th class="px-4 py-2 border-b border-red-500">รายการ</th>
-            <th class="px-4 py-2 border-b border-red-500">ราคา</th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-700">
-          <!-- ตัวอย่างแถวว่าง -->
-          <tr>
-            <td class="px-4 py-2 border-b border-red-500" colspan="5" align="center">ไม่มีข้อมูล</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</main>
-
+  </main>
 </div>

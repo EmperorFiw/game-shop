@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getAllGames, getGameById, getTopGames, increaseGameSold } from "../../models/game";
 import { addPurchase, hasPurchased } from "../../models/purchase";
-import { getUserByUsername, updateUserMoney } from "../../models/user";
+import { getUserByUsername, getUserNameByID, updateUserMoney } from "../../models/user";
 
 const router = Router();
 
@@ -51,9 +51,12 @@ router.get("/:id", async (req, res) => {
 
 router.post("/purchase", async (req: any, res) => {
   const { gameId } = req.body;
-  const { username } = req.auth;
+  const { id } = req.auth;
 
   try {
+    const username = await getUserNameByID(id);
+    if (!username)
+      return res.status(404).json({ status: false, message: "ไม่พบผู้ใช้"});
     // ดึง user + game
     const user = await getUserByUsername(username);
     if (!user) return res.status(404).json({ status: false, message: "ไม่พบผู้ใช้" });
@@ -61,7 +64,7 @@ router.post("/purchase", async (req: any, res) => {
     const game = await getGameById(gameId);
     if (!game) return res.status(404).json({ status: false, message: "ไม่พบเกม" });
 
-    const alreadyBought = await hasPurchased(user.ID, game.id);
+    const alreadyBought = await hasPurchased(user.id, game.id);
     if (alreadyBought) {
       return res.status(400).json({ status: false, message: "คุณได้ซื้อเกมนี้ไปแล้ว" });
     }
@@ -72,9 +75,9 @@ router.post("/purchase", async (req: any, res) => {
     }
     // หักเงิน
     const newMoney = user.money - game.price;
-    await updateUserMoney(user.ID, newMoney);
+    await updateUserMoney(user.id, newMoney);
     // insert purchase_history
-    await addPurchase(user.ID, game.id, game.price);
+    await addPurchase(user.id, game.id, game.price);
 
     // update sold
     await increaseGameSold(game.id);

@@ -4,7 +4,7 @@ import { Router } from "express";
 import fs from "fs";
 import multer from "multer";
 import path from "path";
-import { checkUserExists, createUser, getUserByEmailOrUsername } from "../../models/user";
+import { checkUserExists, createUser, getUserByUsername } from "../../models/user";
 import { generateToken } from "./authen";
 
 const router = Router();
@@ -47,14 +47,14 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
 		}
 
 		await createUser(username, email, hashedPassword, profileImage);
-		const user = await getUserByEmailOrUsername(username, "username");
+		const user = await getUserByUsername(username);
 
     if (!user) {
       return res.json({ status: false, message: "Internal Server Error" });
     }
 
 		const payload = {
-			uid: user.id,
+			id: user.id,
 			username,
 			email,
 			profileImage,

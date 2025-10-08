@@ -1,43 +1,48 @@
 <div class="flex h-screen">
-  <app-navbar></app-navbar>
-<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
-  <!-- ประวัติการทำรายการ -->
-  <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-    <h1 class="text-xl font-bold text-center mb-2">ประวัติการทำรายการของฉัน</h1>
-    <p class="text-sm text-gray-500 text-center mb-6">
-      รายการล่าสุดของท่าน เติมเงิน และ การสั่งซื้อเกม
-    </p>
+	<app-navbar></app-navbar>
+	<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
+		<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+			<h1 class="text-xl font-bold text-center mb-2">ประวัติการทำรายการของฉัน</h1>
+			<p class="text-sm text-gray-500 text-center mb-6">
+				รายการล่าสุดของท่าน ทั้งการเติมเงิน และการสั่งซื้อเกม
+			</p>
 
-    <!-- รายการ 1 -->
-    <div class="border  border-green-700 p-4 rounded-lg mb-4">
-      <div class="flex items-center space-x-4 mb-3">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Battlefield 2042" class="w-16 h-20 object-cover rounded">
-        <div>
-          <h2 class="font-semibold">Battlefield 2042</h2>
-          <p class="text-sm text-gray-600">ประเภทเกม : FPS</p>
-          <p class="text-sm font-medium">ราคา 490 บาท</p>
-        </div>
-      </div>
-    </div>
-    <div class="border border-green-700 rounded px-3 py-2 text-sm my-3">
-      ได้ทำการเติมเงินจำนวน 500 บาท
-    </div>
+			<!-- กำลังโหลด -->
+			<div *ngIf="loading" class="text-center text-gray-500 py-10">
+				กำลังโหลดข้อมูล...
+			</div>
 
-    <!-- รายการ 2 -->
-    <div class="border border-green-700 p-4 rounded-lg mb-4">
-      <div class="flex items-center space-x-4 mb-3">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Arma 3" class="w-16 h-20 object-cover rounded">
-        <div>
-          <h2 class="font-semibold">Arma 3</h2>
-          <p class="text-sm text-gray-600">ประเภทเกม : FPS</p>
-          <p class="text-sm font-medium">ราคา 590 บาท</p>
-        </div>
-      </div>
-    </div>
-    <div class="border border-green-700 rounded px-3 py-2 text-sm">
-      ได้ทำการเติมเงินจำนวน 200 บาท
-    </div>
-  </div>
-</main>
+			<!-- แสดง error -->
+			<div *ngIf="!loading && errorMessage" class="text-center text-red-500 py-10">
+				{{ errorMessage }}
+			</div>
 
+			<!-- ไม่มีข้อมูล -->
+			<div *ngIf="!loading && !errorMessage && transactions.length === 0" class="text-center text-gray-500 py-10">
+				ยังไม่มีประวัติการทำรายการ
+			</div>
+
+			<!-- ลูปแสดงข้อมูล -->
+			<ng-container *ngFor="let item of transactions">
+				<!-- สั่งซื้อเกม -->
+				<div *ngIf="item.type === 'purchase'" class="border border-green-700 p-4 rounded-lg mb-4">
+					<div class="flex items-center space-x-4 mb-3">
+						<img [src]="getGameImage(item.image)" [alt]="item.game_name" class="w-16 h-20 object-cover rounded" />
+						<div>
+							<h2 class="font-semibold">{{ item.game_name }}</h2>
+							<p class="text-sm text-gray-600">ประเภทเกม : {{ item.category }}</p>
+							<p class="text-sm font-medium">ราคา {{ item.price }} บาท</p>
+						</div>
+					</div>
+					<p class="text-xs text-gray-400">วันที่: {{ item.created_at | date:'medium' }}</p>
+				</div>
+
+				<!-- เติมเงิน -->
+				<div *ngIf="item.type === 'deposit'" class="border border-green-700 rounded px-3 py-2 text-sm mb-3">
+					ได้ทำการเติมเงินจำนวน {{ item.amount }} บาท
+					<p class="text-xs text-gray-400 mt-1">วันที่: {{ item.created_at | date:'medium' }}</p>
+				</div>
+			</ng-container>
+		</div>
+	</main>
 </div>

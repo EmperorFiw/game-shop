@@ -61,7 +61,7 @@ export class EditProfile {
 		}
 	}
   getProfileImage(path?: string | null): string {
-    if (!path) return 'assets/default.jpg';
+    if (!path) return `${this.apiUrl}/uploads/default.jpg`;
     if (path.startsWith('http')) return path; // กันกรณีเป็น URL เต็ม
     return `${this.apiUrl}${path}`;
   }
@@ -71,17 +71,21 @@ export class EditProfile {
 		const formData = new FormData();
 		formData.append("username", this.username);
 		formData.append("email", this.email);
-		formData.append("balance", this.balance.toString());
 		if (this.selectedFile) formData.append("avatar", this.selectedFile);
-
 		this.userService.updateProfile(formData).subscribe({
-			next: () => {
-				Swal.fire('สำเร็จ', 'บันทึกข้อมูลเรียบร้อยแล้ว', 'success');
-				this.userService.notifyUserChanged();
-				this.router.navigate(['/profile']);
+			next: (res) => {
+				Swal.fire('สำเร็จ', res.message, 'success').then(() => {
+					window.location.reload();
+				});
 			},
-			error: () =>
-				Swal.fire('ผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้', 'error')
+			error: (err) => {
+				Swal.fire(
+					'ผิดพลาด',
+					err.error?.message || 'ไม่สามารถบันทึกข้อมูลได้',
+					'error'
+				);
+			},
 		});
+		
 	}
 }

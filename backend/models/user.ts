@@ -18,9 +18,10 @@ export interface UserProfileUpdate {
 }
 
 //  ดึง user ด้วย email หรือ username
-export async function getUserByEmailOrUsername(value: string, by: "email" | "username"): Promise<User | null> {
-  const query = `SELECT * FROM users WHERE ${by} = ? LIMIT 1`;
-  const [rows]: any = await db.query(query, [value]);
+export async function getUserByEmail(email: string): Promise<User | null> {
+  const query = `SELECT * FROM users WHERE email = ? LIMIT 1`;
+  const [rows]: any = await db.query(query, [email]);
+  console.log("getUserByEmail result:", rows[0]);
   return rows.length > 0 ? rows[0] : null;
 }
 
@@ -55,6 +56,11 @@ export async function getUserByUsername(username: string) {
 	return rows.length > 0 ? rows[0] : null;
 }
 
+export async function getUserByID(id: number) {
+	const [rows]: any = await db.query("SELECT * FROM users WHERE id = ?", [id]);
+	return rows.length > 0 ? rows[0] : null;
+}
+
 export async function getUserIDByName(username: string): Promise<number | null> {
   const [rows]: any = await db.query(
     "SELECT id FROM users WHERE username = ? LIMIT 1",
@@ -62,23 +68,43 @@ export async function getUserIDByName(username: string): Promise<number | null> 
   );
   return rows.length > 0 ? rows[0].id : null;
 }
-export async function getUserNameByID(id: number): Promise<String | null> {
-  const [rows]: any = await db.query(
-    "SELECT username FROM users WHERE id = ? LIMIT 1",
-    [id]
-  );
-  return rows.length > 0 ? rows[0].id : null;
-}
-// อัปเดตเงิน user
-export async function updateUserMoney(uid: number, newMoney: number) {
-	await db.query("UPDATE users SET money = ? WHERE ID = ?", [newMoney, uid]);
+export async function getUserNameByID(id: number): Promise<string | null> {
+	const [rows]: any = await db.query(
+		"SELECT username FROM users WHERE id = ? LIMIT 1",
+		[id]
+	);
+	return rows.length > 0 ? rows[0].username : null;
 }
 
-export async function updateUserProfile(currentUser: string, data: UserProfileUpdate): Promise<boolean> {
-	const { username, email, balance, avatar } = data;
-	await db.query(
-		"UPDATE users SET username = ?, email = ?, money = ?, profile_image = ? WHERE username = ?",
-		[username, email, balance, avatar, currentUser]
-	);
+// อัปเดตเงิน user
+export async function updateUserMoney(id: number, newMoney: number) {
+	await db.query("UPDATE users SET money = ? WHERE ID = ?", [newMoney, id]);
+}
+export async function updateUserProfile(id: number, data: any): Promise<boolean> {
+	const { username, email, profile_image } = data;
+
+	const fields: string[] = [];
+	const values: any[] = [];
+
+	if (username) {
+		fields.push("username = ?");
+		values.push(username);
+	}
+	if (email) {
+		fields.push("email = ?");
+		values.push(email);
+	}
+	if (profile_image) {
+		fields.push("profile_image = ?");
+		values.push(profile_image);
+	}
+
+	if (fields.length === 0) return false;
+
+	const query = `UPDATE users SET ${fields.join(", ")} WHERE id = ?`;
+	values.push(id);
+  
+	await db.query(query, values);
 	return true;
 }
+

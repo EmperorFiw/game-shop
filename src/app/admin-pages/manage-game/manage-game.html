@@ -27,19 +27,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b">
-            <td class="py-2 px-3">Battlefield 2042</td>
-            <td class="py-2 px-3">FPS</td>
-            <td class="py-2 px-3">490 บาท</td>
-            <td class="py-2 px-3">19 พ.ย. 2021</td>
+          <tr *ngFor="let g of games" class="border-b">
+            <td class="py-2 px-3">{{ g.name }}</td>
+            <td class="py-2 px-3">{{ g.category }}</td>
+            <td class="py-2 px-3">{{ g.price }} บาท</td>
+            <td class="py-2 px-3">{{ g.release_date | date:'mediumDate' }}</td>
             <td class="py-2 px-3 flex gap-2">
               <button class="px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
                 รายละเอียด
               </button>
-              <button class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200">
+              <button (click)="openEditGame(g)" class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200">
                 แก้ไข
               </button>
-              <button class="px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200">
+              <button (click)="deleteGame(g.id)" class="px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200">
                 ลบ
               </button>
             </td>
@@ -52,29 +52,35 @@
     <div *ngIf="showAddGame" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white rounded-lg shadow-xl p-6 w-96">
         <h2 class="text-lg font-semibold mb-4">เพิ่มเกม</h2>
-        
-        <input type="text" placeholder="ชื่อเกม" class="w-full border p-2 rounded mb-3" />
-        <input type="number" placeholder="ราคา" class="w-full border p-2 rounded mb-3" />
-        <select class="w-full border p-2 rounded mb-3">
+
+        <input [(ngModel)]="gameData.name" type="text" placeholder="ชื่อเกม" class="w-full border p-2 rounded mb-3" />
+        <input [(ngModel)]="gameData.price" type="number" placeholder="ราคา" class="w-full border p-2 rounded mb-3" />
+        <select [(ngModel)]="gameData.category" class="w-full border p-2 rounded mb-3">
           <option value="">ประเภทเกม</option>
+          <option value="FPS">FPS</option>
+          <option value="RPG">RPG</option>
+          <option value="Action">Action</option>
+          <option value="Simulation">Simulation</option>
         </select>
-        
+
+        <input type="date" [(ngModel)]="gameData.release_date" class="w-full border p-2 rounded mb-3" />
         <input type="file" (change)="onFileSelected($event)" class="w-full border p-2 rounded mb-3" />
+
         <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview เกม" class="w-full h-40 object-contain mb-3 border rounded" />
 
-        <textarea placeholder="รายละเอียดเกม" class="w-full border p-2 rounded mb-3"></textarea>
+        <textarea [(ngModel)]="gameData.description" placeholder="รายละเอียดเกม" class="w-full border p-2 rounded mb-3"></textarea>
 
         <div class="flex justify-end gap-2">
-          <button (click)="closeAddGame()"
-            class="px-4 py-2 border border-red-400 text-red-600 rounded hover:bg-red-100">
+          <button (click)="closeAddGame()" class="px-4 py-2 border border-red-400 text-red-600 rounded hover:bg-red-100">
             ยกเลิก
           </button>
-          <button class="px-4 py-2 border border-green-400 text-green-600 rounded hover:bg-green-100">
-            บันทึก
+          <button (click)="saveGame()" class="px-4 py-2 border border-green-400 text-green-600 rounded hover:bg-green-100">
+            {{ editMode ? 'บันทึกการแก้ไข' : 'บันทึก' }}
           </button>
         </div>
       </div>
     </div>
+
 
   </main>
 </div>

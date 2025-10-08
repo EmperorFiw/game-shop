@@ -7,7 +7,7 @@ const port = process.env.port || 3000;
 const server = http.createServer(app);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
 	res.status(200).send({ message: "hello game shop" });
 });
 server.listen(port, () => {

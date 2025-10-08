@@ -52,8 +52,7 @@
       </li>
 
       <!-- ออกจากระบบ -->
-      <li routerLink="/login"
-          class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg mt-8 transition-all duration-300 hover:bg-red-500 hover:bg-opacity-10 hover:translate-x-1">
+      <li  (click)="logout()" class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg mt-8 transition-all duration-300 hover:bg-red-500 hover:bg-opacity-10 hover:translate-x-1">
         <div class="w-6 text-center">
           <i class="fas fa-sign-out-alt text-red-400"></i>
         </div>
