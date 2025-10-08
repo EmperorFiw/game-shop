@@ -50,11 +50,11 @@ router.post("/add-game", upload.single("image"), async (req: any, res: Response)
 			return res.status(403).json({ status: false, message: "ไม่มีสิทธิ์เข้าถึง (Admin เท่านั้น)" });
 		}
 
-		const { name, price, category, description, release_date } = req.body;
+		const { name, price, category, description } = req.body;
 		if (!req.file) return res.status(400).json({ status: false, message: "กรุณาอัปโหลดรูปภาพเกม" });
 
 		const imagePath = `/uploads/game/${req.file.filename}`;
-		await addGame(name, description, price, category, release_date, imagePath);
+		await addGame(name, description, price, category, imagePath);
 
 		res.json({ status: true, message: "เพิ่มเกมสำเร็จ" });
 	} catch (err) {
@@ -74,10 +74,10 @@ router.put("/update-game/:id", upload.single("image"), async (req: any, res: Res
 		}
 
 		const id = parseInt(req.params.id);
-		const { name, price, category, description, release_date } = req.body;
+		const { name, price, category, description } = req.body;
 		const imagePath = req.file ? `/uploads/game/${req.file.filename}` : undefined;
 
-		await updateGame(id, name, description, price, category, release_date, imagePath);
+		await updateGame(id, name, description, price, category, imagePath);
 
 		res.json({ status: true, message: "อัปเดตข้อมูลเกมสำเร็จ" });
 	} catch (err) {

@@ -27,7 +27,6 @@ export class ManageGame implements OnInit {
 		price: null,
 		category: '',
 		description: '',
-		release_date: ''
 	};
 
 	constructor(private adminService: AdminService) {}
@@ -65,7 +64,7 @@ export class ManageGame implements OnInit {
 		this.selectedFile = null;
 		this.previewUrl = null;
 		this.editId = null;
-		this.gameData = { name: '', price: null, category: '', description: '', release_date: '' };
+		this.gameData = { name: '', price: null, category: '', description: '' };
 	}
 
 	onFileSelected(event: Event) {

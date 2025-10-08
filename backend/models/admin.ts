@@ -32,13 +32,12 @@ export async function addGame(
 	description: string,
 	price: number,
 	category: string,
-	release_date: string,
 	imagePath: string
 ): Promise<void> {
 	await db.query(
-		`INSERT INTO games (name, description, price, category, release_date, image, created_at)
-		 VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-		[name, description, price, category, release_date, imagePath]
+		`INSERT INTO games (name, description, price, category, image, created_at)
+		 VALUES (?, ?, ?, ?, ?, NOW())`,
+		[name, description, price, category, imagePath]
 	);
 }
 
@@ -57,18 +56,17 @@ export async function updateGame(
 	description: string,
 	price: number,
 	category: string,
-	release_date: string,
 	imagePath?: string
 ): Promise<void> {
 	if (imagePath) {
 		await db.query(
-			`UPDATE games SET name=?, description=?, price=?, category=?, release_date=?, image=? WHERE id=?`,
-			[name, description, price, category, release_date, imagePath, id]
+			`UPDATE games SET name=?, description=?, price=?, category=?, image=? WHERE id=?`,
+			[name, description, price, category, imagePath, id]
 		);
 	} else {
 		await db.query(
-			`UPDATE games SET name=?, description=?, price=?, category=?, release_date=? WHERE id=?`,
-			[name, description, price, category, release_date, id]
+			`UPDATE games SET name=?, description=?, price=?, category=? WHERE id=?`,
+			[name, description, price, category, id]
 		);
 	}
 }

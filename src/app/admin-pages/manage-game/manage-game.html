@@ -63,7 +63,7 @@
           <option value="Simulation">Simulation</option>
         </select>
 
-        <input type="date" [(ngModel)]="gameData.release_date" class="w-full border p-2 rounded mb-3" />
+        <!-- <input type="date" [(ngModel)]="gameData.release_date" class="w-full border p-2 rounded mb-3" /> -->
         <input type="file" (change)="onFileSelected($event)" class="w-full border p-2 rounded mb-3" />
 
         <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview เกม" class="w-full h-40 object-contain mb-3 border rounded" />
@@ -80,7 +80,5 @@
         </div>
       </div>
     </div>
-
-
   </main>
 </div>

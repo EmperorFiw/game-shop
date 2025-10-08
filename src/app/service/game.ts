@@ -29,8 +29,6 @@ export class GameService {
       headers: { Authorization: `Bearer ${this.authService.getToken()}` }
     });
   }
-  
-  
   // ซื้อเกมตาม id
   purchaseById(gameId: number): Observable<any> {
     return this.http.post(`${api.url}/game/purchase`, { gameId }, {
