@@ -40,4 +40,36 @@ export class AdminService {
 		});
 		return this.http.get(`${this.apiUrl}/api/admin/transactions`, { headers });
 	}
+
+	getDiscountCode(): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.get(`${this.apiUrl}/api/discount/getAllCode`, { headers });
+	}
+
+	addCode(data: any): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.post(`${this.apiUrl}/api/discount/addCode`, data, { headers });
+	}
+	updateCode(id: number, data: any): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.put(`${this.apiUrl}/api/discount/updateCode/${id}`, data, { headers });
+	}
+	deleteCode(id: number): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.delete(`${this.apiUrl}/api/discount/deleteCode/${id}`, { headers });
+	}
+	getDashboardStats(): Observable<any> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authService.getToken()}`
+		});
+		return this.http.get(`${this.apiUrl}/api/admin/dashboard`, { headers });
+	}			
 }

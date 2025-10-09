@@ -1,52 +1,49 @@
 <div class="flex h-screen">
-    <app-navbar></app-navbar>
+	<app-navbar></app-navbar>
 
+	<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
+		<!-- Stats -->
+		<div class="grid grid-cols-3 gap-6 mb-8">
+			<div class="bg-white border border-red-400 rounded-lg p-6 text-center shadow-md">
+				<p class="text-gray-500">เกมทั้งหมด</p>
+				<p class="text-2xl font-bold mt-2 text-red-600">{{ totalGames }}</p>
+			</div>
+			<div class="bg-white border border-red-400 rounded-lg p-6 text-center shadow-md">
+				<p class="text-gray-500">คำสั่งซื้อ</p>
+				<p class="text-2xl font-bold mt-2 text-red-600">{{ totalOrders }}</p>
+			</div>
+			<div class="bg-white border border-red-400 rounded-lg p-6 text-center shadow-md">
+				<p class="text-gray-500">ผู้ใช้ทั้งหมด</p>
+				<p class="text-2xl font-bold mt-2 text-red-600">{{ totalUsers }}</p>
+			</div>
+		</div>
 
-<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
-    <div class="grid grid-cols-3 gap-6 mb-8">
-        <div class="border border-red-400 rounded-lg p-6 text-center">
-            <p class="text-gray-500">เกมทั้งหมด</p>
-            <p class="text-2xl font-bold mt-2">55</p>
-        </div>
-        <div class="border border-red-400 rounded-lg p-6 text-center">
-            <p class="text-gray-500">คำสั่งซื้อ</p>
-            <p class="text-2xl font-bold mt-2">55</p>
-        </div>
-        <div class="border border-red-400 rounded-lg p-6 text-center">
-            <p class="text-gray-500">ผู้ใช้ทั้งหมด</p>
-            <p class="text-2xl font-bold mt-2">55</p>
-        </div>
-    </div>
-
-    <div class="border border-red-400 rounded-lg p-4">
-        <h2 class="text-lg font-semibold mb-4">อันดับเกมขายดี</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full border border-red-400">
-                <thead class="bg-red-50">
-                    <tr>
-                        <th class="border border-red-400 px-4 py-2 text-left">อันดับ</th>
-                        <th class="border border-red-400 px-4 py-2 text-left">ชื่อเกม</th>
-                        <th class="border border-red-400 px-4 py-2 text-left">ยอดขาย</th>
-                        <th class="border border-red-400 px-4 py-2 text-left">ราคา</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-red-400 px-4 py-2">1</td>
-                        <td class="border border-red-400 px-4 py-2">Game A</td>
-                        <td class="border border-red-400 px-4 py-2">100</td>
-                        <td class="border border-red-400 px-4 py-2">฿500</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-red-400 px-4 py-2">2</td>
-                        <td class="border border-red-400 px-4 py-2">Game B</td>
-                        <td class="border border-red-400 px-4 py-2">80</td>
-                        <td class="border border-red-400 px-4 py-2">฿450</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</main>
-
+		<!-- Top selling games -->
+		<div class="bg-white border border-red-400 rounded-lg p-4 shadow-md">
+			<h2 class="text-lg font-semibold mb-4">5 อันดับเกมขายดี</h2>
+			<div class="overflow-x-auto">
+				<table class="min-w-full border border-red-400">
+					<thead class="bg-red-50">
+						<tr>
+							<th class="border border-red-400 px-4 py-2 text-left">อันดับ</th>
+							<th class="border border-red-400 px-4 py-2 text-left">ชื่อเกม</th>
+							<th class="border border-red-400 px-4 py-2 text-left">ยอดขาย</th>
+							<th class="border border-red-400 px-4 py-2 text-left">ราคา</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let game of topGames; index as i" class="hover:bg-red-50 transition">
+							<td class="border border-red-400 px-4 py-2">{{ i + 1 }}</td>
+							<td class="border border-red-400 px-4 py-2">{{ game.name }}</td>
+							<td class="border border-red-400 px-4 py-2">{{ game.sold }}</td>
+							<td class="border border-red-400 px-4 py-2">฿{{ game.price }}</td>
+						</tr>
+						<tr *ngIf="topGames.length === 0">
+							<td colspan="4" class="text-center text-gray-500 py-4">ไม่มีข้อมูลเกมขายดี</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</main>
 </div>

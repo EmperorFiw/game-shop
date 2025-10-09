@@ -33,7 +33,7 @@
             <td class="py-2 px-3">{{ g.price }} บาท</td>
             <td class="py-2 px-3">{{ g.release_date | date:'mediumDate' }}</td>
             <td class="py-2 px-3 flex gap-2">
-              <button class="px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
+              <button (click)="openGameDetail(g)" class="px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
                 รายละเอียด
               </button>
               <button (click)="openEditGame(g)" class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200">
@@ -47,6 +47,39 @@
         </tbody>
       </table>
     </div>
+  <!-- Popup รายละเอียดเกม -->
+  <div *ngIf="showGameDetail" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white w-[480px] max-w-[90%] rounded-xl shadow-xl p-6 relative">
+      <button (click)="closeGameDetail()" class="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl">✕</button>
+
+      <h2 class="text-2xl font-bold mb-4">{{ selectedGame.name }}</h2>
+
+      <img
+        [src]="getGameImage(selectedGame.image)"
+        alt="ภาพเกม"
+        class="w-full h-64 object-contain rounded-lg border mb-4"
+      />
+
+      <p><strong>หมวดหมู่:</strong> {{ selectedGame.category }}</p>
+      <p><strong>ราคา:</strong> {{ selectedGame.price | number }} บาท</p>
+      <p *ngIf="selectedGame.release_date">
+        <strong>วันที่วางขาย:</strong> {{ selectedGame.release_date | date:'mediumDate' }}
+      </p>
+
+      <p class="mt-4 text-gray-700 whitespace-pre-line">
+        {{ selectedGame.description || 'ไม่มีรายละเอียดเพิ่มเติม' }}
+      </p>
+
+      <div class="mt-5 flex justify-end">
+        <button
+          (click)="closeGameDetail()"
+          class="px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+        >
+          ปิด
+        </button>
+      </div>
+    </div>
+  </div>
 
     <!-- Popup เพิ่มเกม -->
     <div *ngIf="showAddGame" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

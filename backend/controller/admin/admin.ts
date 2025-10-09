@@ -3,7 +3,7 @@ import fs from "fs";
 import multer from "multer";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import { addGame, deleteGame, getAllGames, getAllTransactions, updateGame } from "../../models/admin";
+import { addGame, deleteGame, getAllGames, getAllTransactions, getDashboardStats, updateGame } from "../../models/admin";
 import { getUserByID } from "../../models/user";
 
 const router = Router();
@@ -29,7 +29,7 @@ router.get("/games", async (req: any, res: Response) => {
 		const user = await getUserByID(id);
 
 		if (!user || user.role !== "admin") {
-			return res.status(403).json({ status: false, message: "ไม่มีสิทธิ์เข้าถึง (Admin เท่านั้น)" });
+			return res.status(403).json({ status: false, message: "Forbidden" });
 		}
 
 		const games = await getAllGames();
@@ -47,7 +47,7 @@ router.post("/add-game", upload.single("image"), async (req: any, res: Response)
 		const user = await getUserByID(id);
 
 		if (!user || user.role !== "admin") {
-			return res.status(403).json({ status: false, message: "ไม่มีสิทธิ์เข้าถึง (Admin เท่านั้น)" });
+			return res.status(403).json({ status: false, message: "Forbidden" });
 		}
 
 		const { name, price, category, description } = req.body;
@@ -70,7 +70,7 @@ router.put("/update-game/:id", upload.single("image"), async (req: any, res: Res
 		const user = await getUserByID(uid);
 
 		if (!user || user.role !== "admin") {
-			return res.status(403).json({ status: false, message: "ไม่มีสิทธิ์เข้าถึง (Admin เท่านั้น)" });
+			return res.status(403).json({ status: false, message: "Forbidden" });
 		}
 
 		const id = parseInt(req.params.id);
@@ -93,7 +93,7 @@ router.delete("/delete-game/:id", async (req: any, res: Response) => {
 		const user = await getUserByID(uid);
 
 		if (!user || user.role !== "admin") {
-			return res.status(403).json({ status: false, message: "ไม่มีสิทธิ์เข้าถึง (Admin เท่านั้น)" });
+			return res.status(403).json({ status: false, message: "Forbidden" });
 		}
 
 		const id = parseInt(req.params.id);
@@ -120,6 +120,25 @@ router.get("/transactions", async (req: any, res: Response) => {
 		res.json({ status: true, data: rows });
 	} catch (err) {
 		console.error("❌ Error /admin/transactions:", err);
+		res.status(500).json({ status: false, message: "เกิดข้อผิดพลาดในเซิร์ฟเวอร์" });
+	}
+});
+
+
+router.get("/dashboard", async (req: any, res: Response) => {
+	try {
+		const { id } = req.auth || {};
+		if (!id) return res.status(401).json({ status: false, message: "Unauthorized" });
+
+		const user = await getUserByID(id);
+		if (!user || user.role !== "admin") {
+			return res.status(403).json({ status: false, message: "Forbidden" });
+		}
+
+		const data = await getDashboardStats();
+		res.json({ status: true, data });
+	} catch (err) {
+		console.error("❌ Error /admin/dashboard:", err);
 		res.status(500).json({ status: false, message: "เกิดข้อผิดพลาดในเซิร์ฟเวอร์" });
 	}
 });

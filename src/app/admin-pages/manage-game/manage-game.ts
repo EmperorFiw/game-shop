@@ -21,7 +21,10 @@ export class ManageGame implements OnInit {
 	editMode = false;
 	editId: number | null = null;
   apiUrl = api.base;
+	selectedGame: any = null;
+	showGameDetail = false;
 
+	
 	gameData = {
 		name: '',
 		price: null,
@@ -128,5 +131,15 @@ export class ManageGame implements OnInit {
 				});
 			}
 		});
+	}
+
+	openGameDetail(game: any) {
+		this.selectedGame = game;
+		this.showGameDetail = true;
+	}
+	
+	closeGameDetail() {
+		this.showGameDetail = false;
+		this.selectedGame = null;
 	}
 }

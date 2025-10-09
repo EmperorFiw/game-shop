@@ -28,16 +28,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center">
-            <td class="px-4 py-2 border">WELCOME100</td>
-            <td class="px-4 py-2 border">100 บาท</td>
-            <td class="px-4 py-2 border">20</td>
-            <td class="px-4 py-2 border">15</td>
-            <td class="px-4 py-2 border">5</td>
-            <td class="px-4 py-2 border">2025-12-31</td>
+          <tr *ngIf="discountCode.length === 0">
+            <td colspan="7" class="text-center py-4 text-gray-500">
+              ไม่มีโค้ดส่วนลดในระบบ
+            </td>
+          </tr>
+          <tr *ngFor="let code of discountCode" class="text-center">
+            <td class="px-4 py-2 border">{{code.code_name}}</td>
+            <td class="px-4 py-2 border">{{code.discount}} บาท</td>
+            <td class="px-4 py-2 border">{{code.count}}</td>
+            <td class="px-4 py-2 border">{{code.used}}</td>
+            <td class="px-4 py-2 border">{{code.left}}</td>
+            <td class="px-4 py-2 border">{{ code.expire | date: 'yyyy-MM-dd' }}</td>
             <td class="px-4 py-2 border">
-              <button class="text-yellow-500 hover:underline mr-2" (click)="openEditCodeModal()">แก้ไข</button>
-              <button class="text-red-500 hover:underline">ลบ</button>
+              <button class="text-yellow-500 hover:underline mr-2" (click)="openEditCodeModal(code)">แก้ไข</button>
+              <button class="text-red-500 hover:underline" (click)="deleteCode(code)">ลบ</button>
             </td>
           </tr>
         </tbody>
@@ -60,6 +65,10 @@
           <div class="mb-3">
             <label class="block text-gray-700 mb-1">จำนวนที่ลด</label>
             <input type="number" class="w-full border rounded-lg p-2" [(ngModel)]="newCode.amount" name="amount">
+          </div>
+          <div class="mb-3">
+            <label class="block text-gray-700 mb-1">จำนวนที่ใช้ได้</label>
+            <input type="number" class="w-full border rounded-lg p-2" [(ngModel)]="newCode.count" name="count">
           </div>
           <div class="mb-3">
             <label class="block text-gray-700 mb-1">วันหมดอายุ</label>

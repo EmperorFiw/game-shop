@@ -70,3 +70,25 @@ export async function updateGame(
 		);
 	}
 }
+
+export async function getDashboardStats(): Promise<any> {
+	const [[gameCount]]: any = await db.query(`SELECT COUNT(*) AS total_games FROM games`);
+	const [[orderCount]]: any = await db.query(`SELECT COUNT(*) AS total_orders FROM purchase_history`);
+	const [[userCount]]: any = await db.query(`SELECT COUNT(*) AS total_users FROM users`);
+
+	const [topGames]: any = await db.query(`
+		SELECT g.id, g.name, g.price, COUNT(p.game_id) AS sold
+		FROM purchase_history p
+		JOIN games g ON g.id = p.game_id
+		GROUP BY g.id
+		ORDER BY sold DESC
+		LIMIT 10
+	`);
+
+	return {
+		total_games: gameCount.total_games || 0,
+		total_orders: orderCount.total_orders || 0,
+		total_users: userCount.total_users || 0,
+		top_games: topGames || []
+	};
+}
