@@ -1,60 +1,62 @@
 <div class="flex h-screen">
   <app-navbar></app-navbar>
-<!-- main details -->
-<main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
-    <button (click)="location.back()" class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
-        ย้อนกลับ
-    </button>
-  <!-- ตะกร้าสินค้า -->
-  <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-    <h1 class="text-xl font-bold text-center mb-2">ตะกร้าของฉัน</h1>
-    <p class="text-sm text-gray-500 text-center mb-6">รายการในตะกร้าของฉัน</p>
 
-    <!-- รายการสินค้า -->
-    <div class="border p-4 rounded-lg flex items-center justify-between mb-4">
-      <div class="flex items-center space-x-4">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg " alt="Battlefield 2042" class="w-16 h-20 object-cover rounded">
-        <div>
-          <h2 class="font-semibold">Battlefield 2042</h2>
-          <p class="text-sm text-gray-600">ประเภทเกม : FPS</p>
-          <p class="text-sm font-medium">ราคา 490 บาท</p>
+  <main class="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 ml-64 p-6 overflow-y-auto">
+    <button (click)="goback()" 
+      class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
+      ย้อนกลับ  
+    </button>
+
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+      <h1 class="text-xl font-bold text-center mb-2">ตะกร้าของฉัน</h1>
+
+      <!-- ถ้ายังไม่มีของในตะกร้า -->
+      <div *ngIf="basketItems.length === 0" class="text-center text-gray-500">
+        🛒 ยังไม่มีสินค้าในตะกร้า
+      </div> 
+
+      <!-- รายการเกม -->
+      <div *ngFor="let game of basketItems" 
+           class="border p-4 rounded-lg flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-4">
+          <img [src]="game.image" [alt]="game.name" class="w-16 h-20 object-cover rounded">
+          <div>
+            <h2 class="font-semibold">{{ game.name }}</h2>
+            <p class="text-sm text-gray-600">ประเภทเกม : {{ game.category }}</p>
+            <p class="text-sm font-medium">ราคา {{ game.price }} บาท</p>
+          </div>
+        </div>
+        <button (click)="removeItemInbasket(game.id)" 
+                class="text-red-500 font-bold">✕</button>
+      </div>
+
+      <!-- ช่องกรอกโค้ดส่วนลด -->
+      <div *ngIf="basketItems.length > 0" class="mb-4">
+        <label for="discountCode" class="block text-sm font-medium text-gray-700 mb-1" >รหัสส่วนลด</label>
+        <div class="flex gap-2">
+          <input id="discountCode" placeholder="กรอกโค้ดส่วนลด"
+          class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <button 
+          class="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-yellow-500">
+            ใช้โค้ด
+          </button>
         </div>
       </div>
-      <button class="text-red-500 font-bold">✕</button>
-    </div>
 
-    <div class="border p-4 rounded-lg flex items-center justify-between mb-4">
-      <div class="flex items-center space-x-4">
-        <img src="https://www.gamesrig.com/img/index/battlefield-2042-cover.jpg" alt="Arma 3" class="w-16 h-20 object-cover rounded">
-        <div>
-          <h2 class="font-semibold">Arma 3</h2>
-          <p class="text-sm text-gray-600">ประเภทเกม : FPS</p>
-          <p class="text-sm font-medium">ราคา 590 บาท</p>
+      <!-- สรุปราคา -->
+      <div *ngIf="basketItems.length > 0" class="text-right mt-4">
+        <p class="text-lg font-bold"> รวมราคาทั้งสิ้น {{ getTotalPrice() }} บาท</p>
+
+        <div class="flex gap-2 mt-3">
+          <button (click)="clearBasket()" 
+                  class="flex-1 bg-red-400 text-white py-2 rounded hover:bg-red-500">
+            ล้างตะกร้า
+          </button>
+          <button class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600" (click)="checkout()">
+            ชำระเงิน
+          </button>
         </div>
       </div>
-      <button class="text-red-500 font-bold">✕</button>
     </div>
-
-    <!-- โค้ดส่วนลด -->
-    <div class="flex space-x-2 mb-4">
-      <input type="text" placeholder="กรอกโค้ดส่วนลด" 
-             class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300">
-      <button class="px-4 py-2 bg-yellow-100 border rounded hover:bg-yellow-200">ใช้โค้ดส่วนลด</button>
-    </div>
-
-    <!-- สรุปราคา -->
-    <div class="text-right space-y-1 mb-4">
-      <p>ราคารวมทั้งหมด <span class="font-medium">1080 บาท</span></p>
-      <p>ส่วนลด <span class="font-medium text-green-600">10 %</span></p>
-      <p class="text-lg font-bold">รวมราคาทั้งสิ้น 972 บาท</p>
-    </div>
-
-    <!-- ปุ่มชำระเงิน -->
-    <button class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
-      ชำระเงิน
-    </button>
-  </div>
-</main>
-
-
+  </main>
 </div>

@@ -41,6 +41,7 @@ export class MovieDetails implements OnInit {
   getGameImage(path: string): string {
     return `${this.apiUrl}${path}`;
   }
+  
   confirmPurchase(): void {
     Swal.fire({
       title: 'ยืนยันการซื้อ',
@@ -75,4 +76,40 @@ export class MovieDetails implements OnInit {
       }
     });
   }
+
+  addToBasket() {
+  const basket = localStorage.getItem('basket');
+  let basketItems = basket ? JSON.parse(basket) : [];
+
+  // ตรวจสอบว่าเกมนี้มีอยู่แล้วในตะกร้าหรือยัง
+  const alreadyInBasket = basketItems.some((item: any) => item.id === this.game.id);
+  if (alreadyInBasket) {
+    Swal.fire({
+      icon: 'info',
+      title: 'เกมนี้อยู่ในตะกร้าแล้ว',
+      confirmButtonColor: '#3085d6'
+    });
+    return;
+  }
+
+  // เพิ่มเกมใหม่เข้าไป
+  basketItems.push({
+    id: this.game.id,
+    name: this.game.name,
+    price: this.game.price,
+    image: this.getGameImage(this.game.image)
+  });
+
+  localStorage.setItem('basket', JSON.stringify(basketItems));
+
+  Swal.fire({
+    icon: 'success',
+    title: 'เพิ่มเกมลงตะกร้าแล้ว!',
+    showConfirmButton: false,
+    timer: 1200
+  });
+
+  this.userService.notifyUserChanged();
+}
+
 }

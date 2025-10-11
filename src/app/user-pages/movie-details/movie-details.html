@@ -27,7 +27,8 @@
   
             <!-- Buttons -->
             <div class="flex gap-4 pt-5">
-              <button class="flex items-center justify-center border border-red-400 text-red-400 px-4 py-2 rounded-lg hover:bg-red-50 transition-all">
+              <button  (click)="addToBasket()"
+              class="flex items-center justify-center border border-red-400 text-red-400 px-4 py-2 rounded-lg hover:bg-red-50 transition-all">
                 <i class="fas fa-shopping-cart mr-2"></i>
               </button>
               <button (click)="confirmPurchase()" class="flex justify-center w-1/2 bg-green-400 text-white text-center px-4 py-2 rounded-lg hover:bg-green-500 transition-all">
