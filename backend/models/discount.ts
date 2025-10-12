@@ -71,3 +71,26 @@ export async function updateCode(
 export async function deleteCode(cid: number): Promise<void> {
 	await db.query(`DELETE FROM discount_code WHERE cid = ?`, [cid]);
 }
+
+export async function checkDiscountCode(code: string) {
+	if (!code) return { status: false, message: "กรุณาระบุโค้ด" };
+
+	const [rows]: any = await db.query("SELECT * FROM discount_code WHERE code_name = ?", [code]);
+	if (rows.length === 0)
+		return { status: false, message: "โค้ดนี้หมดอายุหรือถูกใช้ไปแล้ว" };
+
+	const data = rows[0];
+	const now = new Date();
+
+	if (new Date(data.expire) < now)
+		return { status: false, message: "โค้ดนี้หมดอายุหรือถูกใช้ไปแล้ว" };
+
+	if (data.count <= 0)
+		return { status: false, message: "โค้ดนี้หมดอายุหรือถูกใช้ไปแล้ว" };
+
+	return {
+		status: true,
+		message: "โค้ดใช้ได้",
+		discount: data.discount,
+	};
+}

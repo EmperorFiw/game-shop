@@ -19,7 +19,7 @@
       <div *ngFor="let game of basketItems" 
            class="border p-4 rounded-lg flex items-center justify-between mb-4">
         <div class="flex items-center space-x-4">
-          <img [src]="game.image" [alt]="game.name" class="w-16 h-20 object-cover rounded">
+          <img [src]="getGameImage(game.image)" [alt]="game.name" class="w-16 h-20 object-cover rounded">
           <div>
             <h2 class="font-semibold">{{ game.name }}</h2>
             <p class="text-sm text-gray-600">ประเภทเกม : {{ game.category }}</p>
@@ -32,31 +32,49 @@
 
       <!-- ช่องกรอกโค้ดส่วนลด -->
       <div *ngIf="basketItems.length > 0" class="mb-4">
-        <label for="discountCode" class="block text-sm font-medium text-gray-700 mb-1" >รหัสส่วนลด</label>
+        <label for="discountCode" class="block text-sm font-medium text-gray-700 mb-1">
+          รหัสส่วนลด
+        </label>
         <div class="flex gap-2">
-          <input id="discountCode" placeholder="กรอกโค้ดส่วนลด"
-          class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-          <button 
-          class="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-yellow-500">
+          <input
+            id="discountCode"
+            type="text"
+            [(ngModel)]="discountCode"
+            placeholder="กรอกโค้ดส่วนลด"
+            class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          >
+          <button
+            (click)="getCodeDiscount()"
+            class="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-yellow-500"
+          >
             ใช้โค้ด
           </button>
         </div>
       </div>
+      
 
       <!-- สรุปราคา -->
-      <div *ngIf="basketItems.length > 0" class="text-right mt-4">
-        <p class="text-lg font-bold"> รวมราคาทั้งสิ้น {{ getTotalPrice() }} บาท</p>
+      <div *ngIf="basketItems.length > 0" class="text-right mt-4 space-y-1">
+        <p class="text-base">รวมราคาก่อนส่วนลด {{ getOriginalTotalPrice() }} บาท</p>
+        <p *ngIf="discountValue > 0" class="text-green-600 font-medium">
+          ส่วนลด -{{ discountValue }} บาท
+        </p>
+        <p class="text-lg font-bold">
+          ยอดสุทธิ {{ getTotalPrice() }} บาท
+        </p>
 
         <div class="flex gap-2 mt-3">
           <button (click)="clearBasket()" 
-                  class="flex-1 bg-red-400 text-white py-2 rounded hover:bg-red-500">
+              class="flex-1 bg-red-400 text-white py-2 rounded hover:bg-red-500">
             ล้างตะกร้า
           </button>
-          <button class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600" (click)="checkout()">
+          <button (click)="checkout()" 
+              class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
             ชำระเงิน
           </button>
         </div>
       </div>
+
     </div>
   </main>
 </div>

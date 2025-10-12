@@ -1,5 +1,5 @@
 import { Response, Router } from "express";
-import { addCode, deleteCode, getAllCode, updateCode } from "../../models/discount";
+import { addCode, checkDiscountCode, deleteCode, getAllCode, updateCode } from "../../models/discount";
 import { getUserByID } from "../../models/user";
 
 const router = Router();
@@ -99,5 +99,16 @@ router.delete("/deleteCode/:cid", async (req: any, res: Response) => {
 	}
 });
 
+
+router.post("/check", async (req, res) => {
+	try {
+		const { code } = req.body;
+		const result = await checkDiscountCode(code);
+		res.json(result);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ status: false, message: "เกิดข้อผิดพลาดภายในระบบ" });
+	}
+});
 
 export default router;

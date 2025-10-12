@@ -35,5 +35,9 @@ export class GameService {
       headers: { Authorization: `Bearer ${this.authService.getToken()}` }
     });
   }
-
+	checkDiscountCode(code: string): Observable<any> {
+		return this.http.post(`${api.url}/discount/check`, { code }, {
+      headers: { Authorization: `Bearer ${this.authService.getToken()}` }
+    });
+	}
 }
