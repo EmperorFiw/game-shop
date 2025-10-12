@@ -85,8 +85,10 @@ export class MovieDetails implements OnInit {
   const alreadyInBasket = basketItems.some((item: any) => item.id === this.game.id);
   if (alreadyInBasket) {
     Swal.fire({
-      icon: 'info',
+      icon: 'error',
       title: 'เกมนี้อยู่ในตะกร้าแล้ว',
+      text: `"${this.game.name}" มีอยู่ในตะกร้าแล้ว`,
+      confirmButtonText: 'ตกลง',
       confirmButtonColor: '#3085d6'
     });
     return;

@@ -62,25 +62,16 @@ export class Mybasket implements OnInit {
   let successCount = 0;
   const totalItems = this.basketItems.length;
 
-  //ถ้าซื้อเกมมากกว่า 1
-  if (totalItems > 1) {
-    Swal.fire({
-      icon: 'info',
-      title: 'ซื้อเกมทีละเกม', 
-      text: 'ซื้อได้แค่ที่ละ 1 เกม ไปลบบบบบบบบบบบบบบ',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'ตกลง'
-    });
-  }else{
-    Swal.fire({
-    title: 'ยืนยันการซื้อ?',
-    text: `คุณต้องการซื้อ ${totalItems} เกม รวม ${this.getTotalPrice()} บาทใช่ไหม?`,
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#28a745',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'ยืนยัน',
-    cancelButtonText: 'ยกเลิก'
+  
+  Swal.fire({
+  title: 'ยืนยันการซื้อ?',
+  text: `คุณต้องการซื้อ ${totalItems} เกม รวม ${this.getTotalPrice()} บาทใช่ไหม?`,
+  icon: 'question',
+  showCancelButton: true,
+  confirmButtonColor: '#28a745',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'ยืนยัน',
+  cancelButtonText: 'ยกเลิก'
   }).then((result) => {
     if (result.isConfirmed) {
       this.basketItems.forEach((item) => {
@@ -113,8 +104,6 @@ export class Mybasket implements OnInit {
   });
   }
 
-
-}
 
   goback() { 
     this.location.back();

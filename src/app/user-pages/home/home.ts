@@ -137,21 +137,28 @@ export class Home implements OnInit {
 	addToBasket(game: any): void {
 		const basket = JSON.parse(localStorage.getItem('basket') || '[]');
 		const exists = basket.some((item: any) => item.id === game.id);
-		if (!exists) {
-			const gametoAdd = {
-				...game,
-				image: this.getGameImage(game.image)
-			}
-			basket.push(gametoAdd);
-			localStorage.setItem('basket', JSON.stringify(basket));
+		
+		if(exists) {
+			Swal.fire({
+				icon: 'error',
+				title: 'มีสินค้าในตะกร้าแล้ว',
+				text: `"${game.name}" มีอยู่ในตะกร้าแล้ว`,
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: 'ตกลง'
+			});
+			return;
 		}
+		const gameToAdd = { ...game };
+		basket.push(gameToAdd);
+		localStorage.setItem('basket', JSON.stringify(basket));
+
 		Swal.fire({
 			title: 'เพิ่มในตะกร้าแล้ว!',
 			text: `"${game.name}" ถูกเพิ่มในตะกร้าเรียบร้อย`,
 			icon: 'success',
 			timer: 1000,
 			showConfirmButton: false
-		});
+  });
 	}
 
 
