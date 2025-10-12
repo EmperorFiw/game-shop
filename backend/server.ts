@@ -3,7 +3,7 @@ import http from "http";
 import path from "path";
 import { app } from "./app";
 
-const port = process.env.port || 3000;
+const port = process.env.port || 7777;
 const server = http.createServer(app);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
