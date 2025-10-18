@@ -40,4 +40,8 @@ export class GameService {
       headers: { Authorization: `Bearer ${this.authService.getToken()}` }
     });
 	}
+  purchaseGame(data: { gameIds: number[], discountCode?: string | null, total: number }) {
+    return this.http.post(`${api.base}/game/basket_purchase`, data);
+  }
+  
 }

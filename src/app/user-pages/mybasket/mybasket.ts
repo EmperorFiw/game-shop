@@ -110,50 +110,83 @@ export class Mybasket implements OnInit {
 	}
 
   checkout() {
-    if (this.basketItems.length === 0) {
-      Swal.fire({
-        icon: 'info',
-        title: 'ไม่มีสินค้าในตะกร้า',
-        confirmButtonText: 'ตกลง'
-      });
-      return;
-    }
-  
-    const total = this.getTotalPrice();
-    const ids = this.basketItems.map(i => i.id).join(', ');
-    const code = this.validCode ? this.validCode : 'ไม่ได้ใช้';
-  
-    // แสดง Swal ถามยืนยันก่อนซื้อ
-    Swal.fire({
-      title: 'ยืนยันการสั่งซื้อ?',
-      html: `
-        <b>เกมที่สั่งซื้อ:</b> ${ids}<br>
-        <b>โค้ดส่วนลด:</b> ${code}<br>
-        <b>ยอดรวมหลังหักส่วนลด:</b> ${total} บาท
-      `,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'ยืนยันการซื้อ',
-      cancelButtonText: 'ยกเลิก',
-      confirmButtonColor: '#28a745',
-      cancelButtonColor: '#d33'
-    }).then(result => {
-      if (result.isConfirmed) {
-        console.log('=== รายละเอียดคำสั่งซื้อ ===');
-        console.log('เกมที่สั่งซื้อ:', ids);
-        console.log('โค้ดส่วนลด:', code);
-        console.log('ยอดรวมหลังหักส่วนลด:', total, 'บาท');
-  
-        Swal.fire({
-          icon: 'success',
-          title: 'สั่งซื้อสำเร็จ (Mock)',
-          text: 'ข้อมูลถูกบันทึกใน Console แล้ว',
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
-    });
-  }
+		if (this.basketItems.length === 0) {
+			Swal.fire({
+				icon: 'info',
+				title: 'ไม่มีสินค้าในตะกร้า',
+				confirmButtonText: 'ตกลง'
+			});
+			return;
+		}
+	
+		const total = this.getTotalPrice();
+		const ids = this.basketItems.map(i => i.id);
+		const code = this.validCode ? this.validCode : null;
+	
+		Swal.fire({
+			title: 'ยืนยันการสั่งซื้อ?',
+			html: `
+				<b>เกมที่สั่งซื้อ:</b> ${ids.join(', ')}<br>
+				<b>โค้ดส่วนลด:</b> ${code ? code : 'ไม่ได้ใช้'}<br>
+				<b>ยอดรวมหลังหักส่วนลด:</b> ${total} บาท
+			`,
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: 'ยืนยันการซื้อ',
+			cancelButtonText: 'ยกเลิก',
+			confirmButtonColor: '#28a745',
+			cancelButtonColor: '#d33'
+		}).then(result => {
+			if (!result.isConfirmed) return;
+	
+			Swal.fire({
+				title: 'กำลังดำเนินการ...',
+				text: 'กรุณารอสักครู่',
+				allowOutsideClick: false,
+				didOpen: () => Swal.showLoading()
+			});
+	
+			this.gameService.purchaseGame({
+				gameIds: ids,
+				discountCode: code,
+				total: total
+			}).subscribe({
+				next: (res: any) => {
+					Swal.close();
+	
+					if (res.status) {
+						this.clearBasket();
+	
+						Swal.fire({
+							icon: 'success',
+							title: 'สั่งซื้อสำเร็จ',
+							text: res.message || 'คุณได้สั่งซื้อเกมเรียบร้อยแล้ว',
+							confirmButtonColor: '#28a745'
+						}).then(() => {
+							this.router.navigate(['/history']); // ไปหน้าประวัติการสั่งซื้อ
+						});
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'ไม่สามารถสั่งซื้อได้',
+							text: res.message || 'กรุณาลองใหม่อีกครั้ง',
+							confirmButtonColor: '#d33'
+						});
+					}
+				},
+				error: (err) => {
+					console.error('❌ Purchase Error:', err);
+					Swal.close();
+					Swal.fire({
+						icon: 'error',
+						title: 'เกิดข้อผิดพลาด',
+						text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+						confirmButtonColor: '#d33'
+					});
+				}
+			});
+		});
+	}
   
   getOriginalTotalPrice(): number {
     return this.basketItems.reduce((sum, item) => sum + Number(item.price || 0), 0);

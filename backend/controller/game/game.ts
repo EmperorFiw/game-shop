@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getAllGames, getGameById, getTopGames, increaseGameSold } from "../../models/game";
-import { addPurchase, hasPurchased } from "../../models/purchase";
-import { getUserByUsername, getUserNameByID, updateUserMoney } from "../../models/user";
+import { addPurchase, checkAlreadyPurchased, hasPurchased } from "../../models/purchase";
+import { getUserByID, getUserByUsername, getUserNameByID, updateUserMoney } from "../../models/user";
 
 const router = Router();
 
@@ -87,6 +87,44 @@ router.post("/purchase", async (req: any, res) => {
     console.error(err);
     res.status(500).json({ status: false, message: "เกิดข้อผิดพลาด" });
   }
+});
+router.post("/basket_purchase", async (req: any, res) => {
+	try {
+		const { id } = req.auth;
+		const { gameIds, discountCode, total } = req.body;
+
+		const user = await getUserByID(id);
+		if (!user) return res.status(404).json({ status: false, message: "ไม่พบผู้ใช้" });
+
+		if (user.money < total) {
+			return res.json({ status: false, message: "ยอดเงินไม่เพียงพอ" });
+		}
+
+		const purchasedGames = [];
+		for (const game of gameIds) {
+			const already = await checkAlreadyPurchased(user.id, game.id);
+			if (already) purchasedGames.push(game.name);
+		}
+
+		if (purchasedGames.length > 0) {
+			return res.json({
+				status: false,
+				message: `คุณเคยซื้อเกมเหล่านี้แล้ว: ${purchasedGames.join(", ")}`
+			});
+		}
+
+		for (const game of gameIds) {
+			await addPurchase(user.id, game.id, game.price);
+		}
+
+    await updateUserMoney(user.id, user.money - total);
+
+		res.json({ status: true, message: "สั่งซื้อสำเร็จ" });
+
+	} catch (err) {
+		console.error("❌ basket_purchase error:", err);
+		res.status(500).json({ status: false, message: "เกิดข้อผิดพลาดในเซิร์ฟเวอร์" });
+	}
 });
 
 

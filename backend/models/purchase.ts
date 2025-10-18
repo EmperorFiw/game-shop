@@ -70,3 +70,11 @@ export async function getAllHistory(uid: number): Promise<object[]> {
 
 	return all;
 }
+
+export async function checkAlreadyPurchased(uid: number, gameId: number): Promise<boolean> {
+	const [rows]: any = await db.query(
+		`SELECT id FROM purchase_history WHERE uid = ? AND game_id = ? LIMIT 1`,
+		[uid, gameId]
+	);
+	return rows.length > 0;
+}
